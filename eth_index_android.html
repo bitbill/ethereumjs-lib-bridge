@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ethereumjs lib bridge</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<script type="text/javascript" src="ethereumjs-lib-app.min.js"></script>
+
+<script type="text/javascript">
+function seedHexToAddress(seedHex){
+    var result={};
+    try {
+        var address=bridge.seedHexToAddress(seedHex)
+        result.status=0
+        result.data=[address]
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+function seedHexToPubAddr(seedHex){
+    var result={};
+    try {
+        var data=bridge.seedHexToPubAddr(seedHex)
+        result.status=0
+        result.data=data
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+
+function isValidAddress(address){
+    var result={};
+    try {
+        var validate= bridge.isValidAddress(address)
+        result.status=0
+        result.data=[validate]
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+
+function ibanToAddress(iban){
+    var result={};
+    try {
+        var address= bridge.ibanToAddress(iban)
+        result.status=0
+        result.data=[address]
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+function addressToIban(address){
+    var result={};
+    try {
+        var iban= bridge.addressToIban(address)
+        result.status=0
+        result.data=[iban]
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+function buildEthTransaction(privateKey,amountWei, addressTo, nonce,  gasPrice, gasLimit, customData){
+    var result={};
+    try {
+        var data= bridge.buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData)
+        result.status=0
+        result.data=data
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+function buildEthTxBySeedHex(seedHex,amountWei, addressTo, nonce,gasPrice, gasLimit, customData){
+    var result={};
+    try {
+        var data= bridge.buildEthTxBySeedHex(seedHex, amountWei, addressTo, nonce, gasPrice, gasLimit, customData)
+        result.status=0
+        result.data=data
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+
+function buildTokenTransaction(amountWei, addressTo, nonce, contractAddress, gasLimit, gasPrice, privateKey){
+    var result={};
+    try {
+        var data= bridge.buildTokenTransaction(amountWei, addressTo, nonce, contractAddress, gasLimit, gasPrice, privateKey)
+        result.status=0
+        result.data=data
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+function buildTokenTxBySeedHex(seedHex, amountWei, addressTo, nonce, contractAddress, gasLimit, gasPrice){
+    var result={};
+    try {
+        var data= bridge.buildTokenTxBySeedHex(seedHex, amountWei, addressTo, nonce, contractAddress, gasLimit, gasPrice)
+        result.status=0
+        result.data=data
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+function buildMapEosTransaction(eosPublicKey, nonce, contractAddress, gasLimit, gasPrice, privateKey){
+    var result={};
+    try {
+        var data= bridge.buildMapEosTransaction(eosPublicKey, nonce, contractAddress, gasLimit, gasPrice, privateKey)
+        result.status=0
+        result.data=data
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+function buildMapEosTxBySeedHex(seedHex, eosPublicKey, nonce, contractAddress, gasLimit, gasPrice){
+    var result={};
+    try {
+        var data= bridge.buildMapEosTxBySeedHex(seedHex, eosPublicKey, nonce, contractAddress, gasLimit, gasPrice)
+        result.status=0
+        result.data=data
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+function generateEosKeyPair(){
+    var result={};
+    try {
+        var data= bridge.generateEosKeyPair(generateEosKeyPairCallback)
+        result.status=0
+        result.data=data
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+
+function generateEosKeyPairCallback(eosKeyPair){
+    var result={};
+    try {
+        var data= [eosKeyPair.publicKey,eosKeyPair.privateKey]
+        result.status=0
+        result.data=data
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    var jsonResult= JSON.stringify(result)
+    android.generateEosKeyPairCallback(jsonResult)
+}
+
+function getKeyPairAddrFromKeystore(password, keystoreContent){
+    var result={};
+    try {
+        var data= bridge.getKeyPairAddrFromKeystore(password, keystoreContent)
+        result.status=0
+        result.data=data
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+function getPubAddrFromPrivate(privateKey){
+    var result={};
+    try {
+        var data= bridge.getPubAddrFromPrivate(privateKey)
+        result.status=0
+        result.data=data
+    }catch(e){
+        result.data=[]
+        result.message=e.stack
+        result.status=-1
+    }
+    return JSON.stringify(result)
+}
+
+
+</script>
+</body>
+</html>

@@ -17,6 +17,10 @@ console.log('seedHexToAddress: ' + seedHexToAddress)
 console.log('seedHexToPubAddr: ' + JSON.stringify(bridge.seedHexToPubAddr(seedHex)))
 console.log('seedHexToPrivate: ' + bridge.seedHexToPrivate(seedHex).toString('hex'))
 
+console.log('seedHexToAddrForEtc: ' + bridge.seedHexToAddrForEtc(seedHex))
+console.log('seedHexToPubAddrForEtc: ' + JSON.stringify(bridge.seedHexToPubAddrForEtc(seedHex)))
+console.log('seedHexToPrivateForEtc: ' + bridge.seedHexToPrivateForEtc(seedHex).toString('hex'))
+
 var mnemonicToAddress = bridge.seedToAddress(bridge.mnemonicToSeed(mnemonic))
 console.log('mnemonicToSeed-seedToAddress: ' + mnemonicToAddress)
 
@@ -76,6 +80,20 @@ describe('seed', function() {
 
     it('seedToAddress', function() {
         expect(bridge.seedToAddress(bridge.mnemonicToSeed(mnemonic))).to.be.equal('0x9124bae940c2321ded56f89b7e185b8785942303');
+    });
+
+
+    // etc
+    it('seedHexToAddrForEtc', function() {
+        expect(bridge.seedHexToAddrForEtc(seedHex)).to.be.equal('0x967aE99E77870e9016d46Ae70057a73E72B5Fb8a');
+    });
+
+    it('seedHexToPubAddrForEtc', function() {
+        expect(JSON.stringify(bridge.seedHexToPubAddrForEtc(seedHex))).to.be.equal('["76683b3f376eed7eb2002c93413aa4d28e1d9ba83b401da9db9f6be2727525ee9b4a0c1c9f2e12f7f8891c3d4b34ebc1ba0a3c864b5aa435cfa5c9c906701c73","0x967aE99E77870e9016d46Ae70057a73E72B5Fb8a"]');
+    });
+
+    it('seedHexToPrivateForEtc', function() {
+        expect(bridge.seedHexToPrivateForEtc(seedHex).toString('hex')).to.be.equal('6c768785363f14946fa042a7f280994e1e372f4a54cc97bdc2f153f475eec698');
     });
 });
 

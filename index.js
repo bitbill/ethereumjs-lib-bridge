@@ -12,6 +12,7 @@ var icap = require('ethereumjs-icap');
 var keythereum = require('keythereum');
 
 var ETHEREUM_MAINNET_PATH = "m/44'/60'/0'/0/0"; // ETH coin type is 60
+var ETHEREUM_CLASSIC_MAINNET_PATH = "m/44'/61'/0'/0/0"; // ETC coin type is 61
 var ETHEREUM_TESTNET_PATH = "m/44'/1'/0'/0"; // Testnet (all coins) coin type is 1
 
 var bip39 = require('bip39');
@@ -29,12 +30,34 @@ function mnemonicToSeed(mnemonic) {
 /**
  * Seed to address
  * @param {Buffer} seed
+ * @param {String} [path] Derive path
  * @return {String} address
  */
-function seedToAddress(seed) {
+function seedToAddress(seed, path) {
 	var hd = hdkey.fromMasterSeed(seed);
-	var wallet = hd.derivePath(ETHEREUM_MAINNET_PATH).getWallet();
+	var wallet = hd.derivePath(path || ETHEREUM_MAINNET_PATH).getWallet();
 	return ethereumjsUtil.bufferToHex(wallet.getAddress());
+}
+
+/**
+ * Seed to address
+ * @param {Buffer} seed
+ * @return {String} address
+ */
+function seedToAddrForEtc(seed) {
+    return seedToAddress(seed, ETHEREUM_CLASSIC_MAINNET_PATH);
+}
+
+/**
+ * Seed to checksum address
+ * @param {Buffer} seed
+ * @param {String} [path] Derive path
+ * @return {String} checksum address
+ */
+function seedToChecksumAddress(seed, path) {
+    var hd = hdkey.fromMasterSeed(seed);
+    var wallet = hd.derivePath(path || ETHEREUM_MAINNET_PATH).getWallet();
+    return wallet.getChecksumAddressString();
 }
 
 /**
@@ -42,10 +65,8 @@ function seedToAddress(seed) {
  * @param {Buffer} seed
  * @return {String} checksum address
  */
-function seedToChecksumAddress(seed) {
-    var hd = hdkey.fromMasterSeed(seed);
-    var wallet = hd.derivePath(ETHEREUM_MAINNET_PATH).getWallet();
-    return wallet.getChecksumAddressString();
+function seedToChecksumAddrForEtc(seed) {
+    return seedToChecksumAddress(seed, ETHEREUM_CLASSIC_MAINNET_PATH);
 }
 
 /**
@@ -59,17 +80,50 @@ function seedHexToAddress(seedHex) {
 }
 
 /**
+ * Hex-encoded seed to checksum address
+ * @param {String} seedHex: Hex-encoded seed
+ * @return {String} checksum address
+ */
+function seedHexToAddrForEtc(seedHex) {
+    var seed = Buffer.from(seedHex, 'hex');
+    return seedToChecksumAddrForEtc(seed);
+}
+
+/**
+ * Hex-encoded seed to [publicKey, address]
+ * @param {String} seedHex: Hex-encoded seed
+ * @param {String} [path] Derive path
+ * @return {Object} [String, String]
+ */
+function seedHexToPubAddr(seedHex, path) {
+    var seed = Buffer.from(seedHex, 'hex');
+    var hd = hdkey.fromMasterSeed(seed);
+    var wallet = hd.derivePath(path || ETHEREUM_MAINNET_PATH).getWallet();
+    var publicKey = wallet.getPublicKey().toString('hex');
+    var address = wallet.getChecksumAddressString();
+    return [publicKey, address];
+}
+
+/**
  * Hex-encoded seed to [publicKey, address]
  * @param {String} seedHex: Hex-encoded seed
  * @return {Object} [String, String]
  */
-function seedHexToPubAddr(seedHex) {
+function seedHexToPubAddrForEtc(seedHex) {
+    return seedHexToPubAddr(seedHex, ETHEREUM_CLASSIC_MAINNET_PATH);
+}
+
+/**
+ * Hex-encoded seed to privateKey
+ * @param {String} seedHex: Hex-encoded seed
+ * @param {String} [path] Derive path
+ * @return {Buffer} privateKey
+ */
+function seedHexToPrivate(seedHex, path) {
     var seed = Buffer.from(seedHex, 'hex');
     var hd = hdkey.fromMasterSeed(seed);
-    var wallet = hd.derivePath(ETHEREUM_MAINNET_PATH).getWallet();
-    var publicKey = wallet.getPublicKey().toString('hex');
-    var address = wallet.getChecksumAddressString();
-    return [publicKey, address];
+    var wallet = hd.derivePath(path || ETHEREUM_MAINNET_PATH).getWallet();
+    return wallet.getPrivateKey();
 }
 
 /**
@@ -77,11 +131,8 @@ function seedHexToPubAddr(seedHex) {
  * @param {String} seedHex: Hex-encoded seed
  * @return {Buffer} privateKey
  */
-function seedHexToPrivate(seedHex) {
-    var seed = Buffer.from(seedHex, 'hex');
-    var hd = hdkey.fromMasterSeed(seed);
-    var wallet = hd.derivePath(ETHEREUM_MAINNET_PATH).getWallet();
-    return wallet.getPrivateKey();
+function seedHexToPrivateForEtc(seedHex) {
+    return seedHexToPrivate(seedHex, ETHEREUM_CLASSIC_MAINNET_PATH);
 }
 
 /**
@@ -139,10 +190,11 @@ function addressToIban(address) {
  * @param {Number|String} gasPrice
  * @param {Number|String} gasLimit
  * @param {String} customData
+ * @param {Number} [chainId=1] chainId=61 for etc
  * @param {String} privateKey: Hex-encoded
  * @return {Array} [txid, serializedTx]
  */
-function buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData) {
+function buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData, chainId) {
     privateKey = Buffer.from(privateKey, 'hex');
     var transaction = new EthereumTx({
         nonce: web3.toHex(nonce),
@@ -151,7 +203,7 @@ function buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, 
         to: addressTo,
         value: web3.toHex(amountWei),
         data: (customData && customData.length > 0) ? customData : '0x',
-        chainId: 1
+        chainId: chainId || 1
     });
     transaction.sign(privateKey);
     var txid = ('0x' + transaction.hash().toString('hex'));
@@ -176,6 +228,22 @@ function buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, 
 function buildEthTxBySeedHex(seedHex, amountWei, addressTo, nonce, gasPrice, gasLimit, customData) {
     var privateKey = seedHexToPrivate(seedHex);
     return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData)
+}
+
+/**
+ * build a etc transaction by Hex-encoded seed
+ * @param {String} seedHex: Hex-encoded seed
+ * @param {Number|String} amountWei
+ * @param {String} addressTo
+ * @param {Number|String} nonce
+ * @param {Number|String} gasPrice
+ * @param {Number|String} gasLimit
+ * @param {String} customData
+ * @return {Array} [txid, serializedTx]
+ */
+function buildEtcTxBySeedHex(seedHex, amountWei, addressTo, nonce, gasPrice, gasLimit, customData) {
+    var privateKey = seedHexToPrivateForEtc(seedHex);
+    return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData, 61)
 }
 
 /**
@@ -409,6 +477,12 @@ module.exports = {
     getKeyPairAddrFromKeystore: getKeyPairAddrFromKeystore,
     getKeyPairAddrAsyncFromKeystore: getKeyPairAddrAsyncFromKeystore,
     getPubAddrFromPrivate: getPubAddrFromPrivate,
-    toChecksumAddress: toChecksumAddress
+    toChecksumAddress: toChecksumAddress,
+    seedToAddrForEtc: seedToAddrForEtc,
+    seedToChecksumAddrForEtc: seedToChecksumAddrForEtc,
+    seedHexToPubAddrForEtc: seedHexToPubAddrForEtc,
+    seedHexToPrivateForEtc: seedHexToPrivateForEtc,
+    seedHexToAddrForEtc: seedHexToAddrForEtc,
+    buildEtcTxBySeedHex: buildEtcTxBySeedHex
 };
 

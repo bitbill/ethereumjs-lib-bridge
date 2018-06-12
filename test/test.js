@@ -62,7 +62,8 @@ bridge.generateEosKeyPair(function(eosKeyPair) {
 })
 
 // build tx
-console.log('buildEthTransaction:' + JSON.stringify(bridge.buildEthTransaction(privateKey.toString('hex'), 2441406250, '0xd46e8dd67c5d32be8058bb8eb970870f07244567', 0, 10e12, 30400)))
+console.log('buildEthTransaction:' + JSON.stringify(bridge.buildEthTransaction(privateKey.toString('hex'), 1e+17, '0xd46e8dd67c5d32be8058bb8eb970870f07244567', 0, 1e+12, 21000)))
+console.log('buildEtcTxBySeedHex:' + JSON.stringify(bridge.buildEtcTxBySeedHex(seedHex, 1e+17, '0xd46e8dd67c5d32be8058bb8eb970870f07244567', 0, 1e+12, 21000)))
 
 
 describe('seed', function() {
@@ -196,6 +197,10 @@ describe('generate eos key pair', function() {
 
 describe('build tx', function() {
     it('buildEthTransaction', function() {
-        expect(JSON.stringify(bridge.buildEthTransaction(privateKey.toString('hex'), 2441406250, '0xd46e8dd67c5d32be8058bb8eb970870f07244567', 0, 10e12, 30400))).to.be.equal('["0xbf81b5ef67cfbe58e0fc7ec1a2df997c779d40aa351453cfa642a94f0602ae91","0xf869808609184e72a0008276c094d46e8dd67c5d32be8058bb8eb970870f07244567849184e72a8026a0f42aec174f05e0f4c71ed7c4e888f834692e5eec85d82a4c88755872ce3ab24da00b22378ad5e5fe2cc109522a7fdfcfbaeffbac6360048098418de712e125bd04"]');
+        expect(JSON.stringify(bridge.buildEthTransaction(privateKey.toString('hex'), 1e+17, '0xd46e8dd67c5d32be8058bb8eb970870f07244567', 0, 1e+12, 21000))).to.be.equal('["0xa67de6ed283816afd3f15fdad734465f483f68567970f476aad22784d64301e4","0xf86c8085e8d4a5100082520894d46e8dd67c5d32be8058bb8eb970870f0724456788016345785d8a00008025a027bec1e14099ff2e5773af7d576e36cd530df800e3fd7d5f70d0b1ac87d0b6f7a036086098ce451b2cfd4b2e3af0b010b19e3f909477eab25abbfde500ccd1f6db"]');
+    });
+
+    it('buildEtcTxBySeedHex', function() {
+        expect(JSON.stringify(bridge.buildEtcTxBySeedHex(seedHex, 1e+17, '0xd46e8dd67c5d32be8058bb8eb970870f07244567', 0, 1e+12, 21000))).to.be.equal('["0xb8824f4d405804ffaab09a86a3b400b4433c55469dbbcc035d44714c5b4d27fb","0xf86d8085e8d4a5100082520894d46e8dd67c5d32be8058bb8eb970870f0724456788016345785d8a000080819ea0405a9d629b7e7f240d5b44d1752e5fa93800d0c47baaa445d0a7ea19bd8bac19a0774a2e60fbd276c8218bbec21cb7e392796a25f9ec8699423cf23b598bac89ff"]');
     });
 });

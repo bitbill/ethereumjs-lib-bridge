@@ -242,7 +242,7 @@ function buildEthTxBySeedHex(seedHex, amountWei, addressTo, nonce, gasPrice, gas
  * @return {Array} [txid, serializedTx]
  */
 function buildEtcTxBySeedHex(seedHex, amountWei, addressTo, nonce, gasPrice, gasLimit, customData) {
-    var privateKey = seedHexToPrivateForEtc(seedHex);
+    var privateKey = seedHexToPrivate(seedHex);
     return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData, 61)
 }
 

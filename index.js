@@ -231,6 +231,21 @@ function buildEthTxBySeedHex(seedHex, amountWei, addressTo, nonce, gasPrice, gas
 }
 
 /**
+ * build a etc transaction by Hex-encoded privateKey
+ * @param {String} privateKey: Hex-encoded
+ * @param {Number|String} amountWei
+ * @param {String} addressTo
+ * @param {Number|String} nonce
+ * @param {Number|String} gasPrice
+ * @param {Number|String} gasLimit
+ * @param {String} customData
+ * @return {Array} [txid, serializedTx]
+ */
+function buildEtcTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData) {
+    return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData, 61)
+}
+
+/**
  * build a etc transaction by Hex-encoded seed
  * @param {String} seedHex: Hex-encoded seed
  * @param {Number|String} amountWei
@@ -483,6 +498,7 @@ module.exports = {
     seedHexToPubAddrForEtc: seedHexToPubAddrForEtc,
     seedHexToPrivateForEtc: seedHexToPrivateForEtc,
     seedHexToAddrForEtc: seedHexToAddrForEtc,
+    buildEtcTransaction: buildEtcTransaction,
     buildEtcTxBySeedHex: buildEtcTxBySeedHex
 };
 

@@ -464,6 +464,60 @@ function toChecksumAddress(address) {
     return ethereumjsUtil.toChecksumAddress(address);
 }
 
+/**
+ * build a deploy contract transaction
+ * @param {Array} constructorArgs
+ * @param {Number|String} nonce
+ * @param {Number|String} gasPrice
+ * @param {Number|String} gasLimit
+ * @param {String} privateKey: Hex-encoded
+ * @return {Array} [txid, serializedTx]
+ */
+function buildDeployContractTx(constructorArgs, nonce, gasLimit, gasPrice, privateKey) {
+    privateKey = Buffer.from(privateKey, 'hex');
+    var data = util.getDeployContractTxData(web3, constructorArgs);
+    console.log('buildDeployContractTx data', data);
+    var transaction = new EthereumTx({
+        nonce: web3.toHex(nonce),
+        gasPrice: web3.toHex(gasPrice),
+        gasLimit: web3.toHex(gasLimit),
+        value: 0,
+        data: data,
+        chainId: 1
+    });
+    //console.log(transaction);
+    transaction.sign(privateKey);
+    var serializedTx = ('0x' + transaction.serialize().toString('hex'));
+    var txid = ('0x' + transaction.hash().toString('hex'));
+    return [txid, serializedTx];
+}
+
+
+/**
+ * build a transaction for calling contract method
+ * @param {string} funcName
+ * @param {Array<string>} types, a array of func params type, eg:[ 'uint', 'uint32[]', 'bytes10', 'bytes' ]
+ * @param {Array<type>} values, a array of func params value, eg: [ 0x123, [ 0x456, 0x789 ], '1234567890', 'Hello, world!' ]
+ * @param {Number|String} nonce
+ * @param {String} contractAddress
+ * @param {Number|String} gasPrice
+ * @param {Number|String} gasLimit
+ * @param {String} privateKey: Hex-encoded
+ * @return {Array} [txid, serializedTx]
+ */
+function buildCallContractMethodTx(funcName, types, values, nonce, contractAddress, gasLimit, gasPrice, privateKey) {
+    privateKey = Buffer.from(privateKey, 'hex');
+    var data = util.getTxData(funcName, types, values);
+    //  console.log('Data', data);
+    var raw = util.mapEthTransaction(web3, contractAddress, '0', nonce, gasPrice, gasLimit, data);
+    // console.log(raw);
+    var transaction = new EthereumTx(raw);
+    //console.log(transaction);
+    transaction.sign(privateKey);
+    var serializedTx = ('0x' + transaction.serialize().toString('hex'));
+    var txid = ('0x' + transaction.hash().toString('hex'));
+    return [txid, serializedTx];
+}
 
 module.exports = {
     mnemonicToSeed: mnemonicToSeed,
@@ -499,6 +553,8 @@ module.exports = {
     seedHexToPrivateForEtc: seedHexToPrivateForEtc,
     seedHexToAddrForEtc: seedHexToAddrForEtc,
     buildEtcTransaction: buildEtcTransaction,
-    buildEtcTxBySeedHex: buildEtcTxBySeedHex
+    buildEtcTxBySeedHex: buildEtcTxBySeedHex,
+    buildDeployContractTx: buildDeployContractTx,
+    buildCallContractMethodTx: buildCallContractMethodTx
 };
 

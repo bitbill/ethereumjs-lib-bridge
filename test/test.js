@@ -64,7 +64,7 @@ bridge.generateEosKeyPair(function(eosKeyPair) {
 // build tx
 console.log('buildEthTransaction:' + JSON.stringify(bridge.buildEthTransaction(privateKey.toString('hex'), 1e+17, '0xd46e8dd67c5d32be8058bb8eb970870f07244567', 0, 1e+12, 21000)))
 console.log('buildEtcTxBySeedHex:' + JSON.stringify(bridge.buildEtcTxBySeedHex(seedHex, 1e+17, '0xd46e8dd67c5d32be8058bb8eb970870f07244567', 0, 1e+12, 21000)))
-console.log('buildDeployContractTx:' + JSON.stringify(bridge.buildDeployContractTx([10000000000*1e+18, 'ContractTest', 1e+18, 'CTT'], 0, 1e+12, 21000, privateKey.toString('hex'))))
+console.log('buildDeployContractTx:' + JSON.stringify(bridge.buildDeployContractTx([['0x1E335392255A738Eb98b71d24445f54488Cb2CDB','0x097bEA5e8032066457B516abbAD59B67D1096405','0x0298E91A39E001626d33cCF3e62b00F35f74055e'], 2], 0, 1e+12, 21000, privateKey.toString('hex'))))
 
 describe('seed', function() {
     it('seedHexToAddress', function() {

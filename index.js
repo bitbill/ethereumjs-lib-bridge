@@ -519,6 +519,27 @@ function buildCallContractMethodTx(funcName, types, values, nonce, contractAddre
     return [txid, serializedTx];
 }
 
+/**
+ * generate multisig
+ * @param {Number|String} spendNonce
+ * @param {String} contractAddress
+ * @param {Number|String} value
+ * @param {String} destination
+ * @param {String} privateKey: Hex-encoded
+ * @return {Array} multisig [v, r, s]
+ */
+function generateMultiSig(spendNonce, contractAddress, value, destination, privateKey) {
+    privateKey = Buffer.from(privateKey, 'hex');
+    var msgHex = '0x' + web3.padLeft(web3.toHex(spendNonce).substr(2), 64) + web3.toHex(contractAddress).substr(2) + web3.padLeft(web3.toHex(value).substr(2), 64) + web3.toHex(destination).substr(2);
+    console.log('msgHex: ' + msgHex);
+    var msgHash = ethereumjsUtil.sha3(msgHex);
+    console.log('msgHash: ' + msgHash.toString('hex'))
+    var sig = ethereumjsUtil.ecsign(msgHash, privateKey);
+
+    return [sig.v-27, sig.r, sig.s];
+}
+
+
 module.exports = {
     mnemonicToSeed: mnemonicToSeed,
     seedToAddress: seedToAddress,
@@ -555,6 +576,7 @@ module.exports = {
     buildEtcTransaction: buildEtcTransaction,
     buildEtcTxBySeedHex: buildEtcTxBySeedHex,
     buildDeployContractTx: buildDeployContractTx,
-    buildCallContractMethodTx: buildCallContractMethodTx
+    buildCallContractMethodTx: buildCallContractMethodTx,
+    generateMultiSig: generateMultiSig
 };
 

@@ -536,7 +536,7 @@ function generateMultiSig(spendNonce, contractAddress, value, destination, priva
     console.log('msgHash: ' + msgHash.toString('hex'))
     var sig = ethereumjsUtil.ecsign(msgHash, privateKey);
 
-    return [sig.v-27, sig.r, sig.s];
+    return [sig.v-27, '0x'+sig.r.toString('hex'), '0x'+sig.s.toString('hex')];
 }
 
 

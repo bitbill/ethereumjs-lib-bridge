@@ -66,6 +66,8 @@ console.log('buildEthTransaction:' + JSON.stringify(bridge.buildEthTransaction(p
 console.log('buildEtcTxBySeedHex:' + JSON.stringify(bridge.buildEtcTxBySeedHex(seedHex, 1e+17, '0xd46e8dd67c5d32be8058bb8eb970870f07244567', 0, 1e+12, 21000)))
 console.log('buildDeployContractTx:' + JSON.stringify(bridge.buildDeployContractTx([['0x1E335392255A738Eb98b71d24445f54488Cb2CDB','0x097bEA5e8032066457B516abbAD59B67D1096405','0x0298E91A39E001626d33cCF3e62b00F35f74055e'], 2], 0, 1e+12, 21000, privateKey.toString('hex'))))
 
+console.log('generateMultiSig: ' + JSON.stringify(bridge.generateMultiSig(123456789,'0xcbbe6ec46746218a5bed5b336ab86a0a22804d39','0x123456','0xB8c77482e45F1F44dE1745F52C74426C631bDD52','ded772d10a77295b897824db5a4ab11c24a507a146cef2560460e491d242ccb9')))
+
 describe('seed', function() {
     it('seedHexToAddress', function() {
         expect(seedHexToAddress).to.be.equal('0x9124bae940c2321DEd56f89B7e185b8785942303');
@@ -203,8 +205,16 @@ describe('build tx', function() {
     it('buildEtcTxBySeedHex', function() {
         expect(JSON.stringify(bridge.buildEtcTxBySeedHex(seedHex, 1e+17, '0xd46e8dd67c5d32be8058bb8eb970870f07244567', 0, 1e+12, 21000))).to.be.equal('["0xb8824f4d405804ffaab09a86a3b400b4433c55469dbbcc035d44714c5b4d27fb","0xf86d8085e8d4a5100082520894d46e8dd67c5d32be8058bb8eb970870f0724456788016345785d8a000080819ea0405a9d629b7e7f240d5b44d1752e5fa93800d0c47baaa445d0a7ea19bd8bac19a0774a2e60fbd276c8218bbec21cb7e392796a25f9ec8699423cf23b598bac89ff"]');
     });
+});
+
+
+describe('multiple signature', function() {
+    it('privateToAddress', function() {
+        expect(JSON.stringify(bridge.generateMultiSig(123456789,'0xcbbe6ec46746218a5bed5b336ab86a0a22804d39','0x123456','0xB8c77482e45F1F44dE1745F52C74426C631bDD52','ded772d10a77295b897824db5a4ab11c24a507a146cef2560460e491d242ccb9'))).to.be.equal('[1,"0xf9af045f39368b457ae9abbdae86ce1eb485758a9795693613f7ae52b970539a","0x4c385443461e184420f1e80ecd771042bc1d8048965c389038473d99dcc77d39"]');
+    });
+
 
     it('buildDeployContractTx', function() {
-        // expect(JSON.stringify(bridge.buildDeployContractTx([10000000000*1e+18, 'ContractTest', 1e+18, 'CTT'], 0, 1e+12, 21000, privateKey.toString('hex')))).to.be.equal('["0x2be23c3966890b0603c95d4a1e07ed411f60675456affa53865b1c58dd3c016f","0xf8fd8082520885e8d4a510008080b8ac3078307836303630363034303532333431353630306535373630303038306664356235623562356236303336383036303165363030303339363030306633303036303630363034303532356236303030383066643030613136353632376137613732333035383230336565393861373637393438653962633038303934646634613436616230333631663036386232613535393033326366393638646635626266363365393134333030323925a03a5d18433f1646eda47ddfa94c1dd71851b8b5720ecc386c6ffcee404e8f6b53a02fefcb80ba974f284e36889f8026d55b2ea5c7f273eeb15ccc3b382cb6fdad83"]');
+        expect(bridge.buildDeployContractTx([['0x1E335392255A738Eb98b71d24445f54488Cb2CDB', '0x097bEA5e8032066457B516abbAD59B67D1096405', '0x0298E91A39E001626d33cCF3e62b00F35f74055e'], 2], 0, 1e+12, 21000, privateKey.toString('hex'))[0]).to.be.equal('0xa9daf62d02467f530ec407a0c101774579b843eec0da380eb151b1de41278d78');
     });
 });

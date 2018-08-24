@@ -492,6 +492,20 @@ function buildDeployContractTx(constructorArgs, nonce, gasLimit, gasPrice, priva
     return [txid, serializedTx];
 }
 
+/**
+ * build a deploy contract transaction by Hex-encoded seed
+ * @param {Array} constructorArgs
+ * @param {Number|String} nonce
+ * @param {Number|String} gasPrice
+ * @param {Number|String} gasLimit
+ * @param {String} seedHex: Hex-encoded seed
+ * @return {Array} [txid, serializedTx]
+ */
+function buildDeployContractTxBySeedHex(constructorArgs, nonce, gasLimit, gasPrice, seedHex) {
+    var privateKey = seedHexToPrivate(seedHex);
+    return buildDeployContractTx(constructorArgs, nonce, gasLimit, gasPrice, privateKey);
+}
+
 
 /**
  * build a transaction for calling contract method
@@ -505,7 +519,7 @@ function buildDeployContractTx(constructorArgs, nonce, gasLimit, gasPrice, priva
  * @param {String} privateKey: Hex-encoded
  * @return {Array} [txid, serializedTx]
  */
-function buildCallContractMethodTx(funcName, types, values, nonce, contractAddress, gasLimit, gasPrice, privateKey) {
+function buildCallContractMdTx(funcName, types, values, nonce, contractAddress, gasLimit, gasPrice, privateKey) {
     privateKey = Buffer.from(privateKey, 'hex');
     var data = util.getTxData(funcName, types, values);
     //  console.log('Data', data);
@@ -517,6 +531,46 @@ function buildCallContractMethodTx(funcName, types, values, nonce, contractAddre
     var serializedTx = ('0x' + transaction.serialize().toString('hex'));
     var txid = ('0x' + transaction.hash().toString('hex'));
     return [txid, serializedTx];
+}
+
+/**
+ * build a transaction for calling multisig contract method
+ * @param {String} destination
+ * @param {Number|String} value
+ * @param {Array} vs: Array of multisig v
+ * @param {Array} rs: Array of multisig r
+ * @param {Array} ss: Array of multisig s
+ * @param {Number|String} nonce
+ * @param {String} contractAddress
+ * @param {Number|String} gasPrice
+ * @param {Number|String} gasLimit
+ * @param {String} privateKey: Hex-encoded
+ * @return {Array} [txid, serializedTx]
+ */
+function buildCallMSContractMdTx(destination, value, vs, rs, ss, nonce, contractAddress, gasLimit, gasPrice, privateKey) {
+    var funcName = 'spend';
+    var types = ['address', 'uint256', 'uint8[]', 'bytes32[]', 'bytes32[]'];
+    var values = [destination, web3.toHex(value), vs, rs, ss];
+    return buildCallContractMdTx(funcName, types, values, nonce, contractAddress, gasLimit, gasPrice, privateKey);
+}
+
+/**
+ * build a transaction for calling multisig contract method by Hex-encoded seed
+ * @param {String} destination
+ * @param {Number|String} value
+ * @param {Array} vs: Array of multisig v
+ * @param {Array} rs: Array of multisig r
+ * @param {Array} ss: Array of multisig s
+ * @param {Number|String} nonce
+ * @param {String} contractAddress
+ * @param {Number|String} gasPrice
+ * @param {Number|String} gasLimit
+ * @param {String} seedHex: Hex-encoded seed
+ * @return {Array} [txid, serializedTx]
+ */
+function buildCallMSContractMdTxBySeedHex(destination, value, vs, rs, ss, nonce, contractAddress, gasLimit, gasPrice, seedHex) {
+    var privateKey = seedHexToPrivate(seedHex);
+    return buildCallMSContractMdTx(destination, value, vs, rs, ss, nonce, contractAddress, gasLimit, gasPrice, privateKey);
 }
 
 /**
@@ -539,6 +593,19 @@ function generateMultiSig(spendNonce, contractAddress, value, destination, priva
     return [sig.v-27, '0x'+sig.r.toString('hex'), '0x'+sig.s.toString('hex')];
 }
 
+/**
+ * generate multisig by Hex-encoded seed
+ * @param {Number|String} spendNonce
+ * @param {String} contractAddress
+ * @param {Number|String} value
+ * @param {String} destination
+ * @param {String} seedHex: Hex-encoded seed
+ * @return {Array} multisig [v, r, s]
+ */
+function generateMultiSigBySeedHex(spendNonce, contractAddress, value, destination, seedHex) {
+    var privateKey = seedHexToPrivate(seedHex);
+    return generateMultiSig(spendNonce, contractAddress, value, destination, privateKey);
+}
 
 module.exports = {
     mnemonicToSeed: mnemonicToSeed,
@@ -576,7 +643,10 @@ module.exports = {
     buildEtcTransaction: buildEtcTransaction,
     buildEtcTxBySeedHex: buildEtcTxBySeedHex,
     buildDeployContractTx: buildDeployContractTx,
-    buildCallContractMethodTx: buildCallContractMethodTx,
-    generateMultiSig: generateMultiSig
+    buildDeployContractTxBySeedHex: buildDeployContractTxBySeedHex,
+    buildCallMSContractMdTx: buildCallMSContractMdTx,
+    buildCallMSContractMdTxBySeedHex: buildCallMSContractMdTxBySeedHex,
+    generateMultiSig: generateMultiSig,
+    generateMultiSigBySeedHex: generateMultiSigBySeedHex
 };
 

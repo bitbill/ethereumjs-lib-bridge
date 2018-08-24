@@ -209,7 +209,7 @@ describe('build tx', function() {
 
 
 describe('multiple signature', function() {
-    it('privateToAddress', function() {
+    it('generateMultiSig', function() {
         expect(JSON.stringify(bridge.generateMultiSig(123456789,'0xcbbe6ec46746218a5bed5b336ab86a0a22804d39','0x123456','0xB8c77482e45F1F44dE1745F52C74426C631bDD52','ded772d10a77295b897824db5a4ab11c24a507a146cef2560460e491d242ccb9'))).to.be.equal('[1,"0xf9af045f39368b457ae9abbdae86ce1eb485758a9795693613f7ae52b970539a","0x4c385443461e184420f1e80ecd771042bc1d8048965c389038473d99dcc77d39"]');
     });
 

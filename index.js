@@ -28,6 +28,16 @@ function mnemonicToSeed(mnemonic) {
 }
 
 /**
+ * Mnemonic to seedHex
+ * @param {String} mnemonic
+ * @return {String} seedHex
+ */
+function mnemonicToSeedHex(mnemonic) {
+    var seed = bip39.mnemonicToSeed(mnemonic);
+    return seed.toString('hex');
+}
+
+/**
  * Seed to address
  * @param {Buffer} seed
  * @param {String} [path] Derive path
@@ -586,8 +596,8 @@ function generateMultiSig(spendNonce, contractAddress, value, destination, priva
     privateKey = Buffer.from(privateKey, 'hex');
     var msgHex = '0x' + web3.padLeft(web3.toHex(spendNonce).substr(2), 64) + web3.toHex(contractAddress).substr(2) + web3.padLeft(web3.toHex(value).substr(2), 64) + web3.toHex(destination).substr(2);
     console.log('msgHex: ' + msgHex);
-    var msgHash = ethereumjsUtil.sha3(msgHex);
-    console.log('msgHash: ' + msgHash.toString('hex'))
+    var msgHash = ethereumjsUtil.hashPersonalMessage(ethereumjsUtil.sha3(msgHex));
+    console.log('msgHash: ' + msgHash.toString('hex'));
     var sig = ethereumjsUtil.ecsign(msgHash, privateKey);
 
     return [sig.v-27, '0x'+sig.r.toString('hex'), '0x'+sig.s.toString('hex')];
@@ -609,6 +619,7 @@ function generateMultiSigBySeedHex(spendNonce, contractAddress, value, destinati
 
 module.exports = {
     mnemonicToSeed: mnemonicToSeed,
+    mnemonicToSeedHex: mnemonicToSeedHex,
     seedToAddress: seedToAddress,
     seedToChecksumAddress: seedToChecksumAddress,
     seedHexToAddress: seedHexToAddress,

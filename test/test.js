@@ -210,7 +210,7 @@ describe('build tx', function() {
 
 describe('multiple signature', function() {
     it('generateMultiSig', function() {
-        expect(JSON.stringify(bridge.generateMultiSig(123456789,'0xcbbe6ec46746218a5bed5b336ab86a0a22804d39','0x123456','0xB8c77482e45F1F44dE1745F52C74426C631bDD52','ded772d10a77295b897824db5a4ab11c24a507a146cef2560460e491d242ccb9'))).to.be.equal('[1,"0xf9af045f39368b457ae9abbdae86ce1eb485758a9795693613f7ae52b970539a","0x4c385443461e184420f1e80ecd771042bc1d8048965c389038473d99dcc77d39"]');
+        expect(JSON.stringify(bridge.generateMultiSig(123456789,'0xcbbe6ec46746218a5bed5b336ab86a0a22804d39','0x123456','0xB8c77482e45F1F44dE1745F52C74426C631bDD52','ded772d10a77295b897824db5a4ab11c24a507a146cef2560460e491d242ccb9'))).to.be.equal('[0,"0x5e97da389bed7bd3244da8f73c8abe535405acd291284e19a468e851f944fba4","0x101bc448340aaf2ac43af33b80607f6ea375432ef650e352d982322aceeafe58"]');
     });
 
 

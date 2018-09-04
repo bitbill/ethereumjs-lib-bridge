@@ -213,8 +213,23 @@ describe('multiple signature', function() {
         expect(JSON.stringify(bridge.generateMultiSig(123456789,'0xcbbe6ec46746218a5bed5b336ab86a0a22804d39','0x123456','0xB8c77482e45F1F44dE1745F52C74426C631bDD52','ded772d10a77295b897824db5a4ab11c24a507a146cef2560460e491d242ccb9'))).to.be.equal('[0,"0x5e97da389bed7bd3244da8f73c8abe535405acd291284e19a468e851f944fba4","0x101bc448340aaf2ac43af33b80607f6ea375432ef650e352d982322aceeafe58"]');
     });
 
+    it('generateMultiSigBySeedHex', function() {
+        expect(JSON.stringify(bridge.generateMultiSigBySeedHex(123456789,'0xcbbe6ec46746218a5bed5b336ab86a0a22804d39','0x123456','0xB8c77482e45F1F44dE1745F52C74426C631bDD52', seedHex))).to.be.equal('[1,"0x885302487675fdc0972775a0215b5f1c4a34a6f22113cd74d65881ca213a32d3","0x22874fdd4d29758fc9474026ce52cdd77231f81ed789d382cd9211a04716bd6e"]');
+    });
 
     it('buildDeployContractTx', function() {
         expect(bridge.buildDeployContractTx([['0x1E335392255A738Eb98b71d24445f54488Cb2CDB', '0x097bEA5e8032066457B516abbAD59B67D1096405', '0x0298E91A39E001626d33cCF3e62b00F35f74055e'], 2], 0, 1e+12, 21000, privateKey.toString('hex'))[0]).to.be.equal('0xa9daf62d02467f530ec407a0c101774579b843eec0da380eb151b1de41278d78');
     });
+
+    it('buildDeployContractTxBySeedHex', function() {
+        expect(bridge.buildDeployContractTxBySeedHex([['0x1E335392255A738Eb98b71d24445f54488Cb2CDB', '0x097bEA5e8032066457B516abbAD59B67D1096405', '0x0298E91A39E001626d33cCF3e62b00F35f74055e'], 2], 0, 1e+12, 21000, seedHex)[0]).to.be.equal('0x6576f6facb6d38a2e8569fb0145b036854bca50c117c402220b191496418ce1d');
+    });
+
+    it('buildCallMSContractMdTx', function() {
+        expect(bridge.buildCallMSContractMdTx('0x4Db4504a834abc823Bd6b1Db010fD6e7f3C4aB85', '10000000000000000', [0,1], ["0x59aa0ed94154a9256595beecd9646f902564ba6ec0945622ad103b4849f98e98","0x79eca97e44c2c1b775ef7cc4a16ba23a023a40d17ee969cce5e6ed90ab5b035b"], ["0x5164fd1d70593499b3d829a256e0ab2328d21fb5fa7f48cc46b1739fbf6192fa","0x4d814bbf86b32b70e078f8d3c110e9963011b52f8c3f397826f55c900d9455b1"], 211, '0x604650973221dc9f0da94fbf5fdbdfaa70e08f4c', 800000, '15000000000', hexPrivateKey)[0]).to.be.equal('0x10a27c24f0962733ce6ee0cf59e51471f1535435f6c0dd21402aac66fa846e32');
+    });
+
+    it('buildCallMSContractMdTxBySeedHex', function() {
+        expect(bridge.buildCallMSContractMdTxBySeedHex('0x4Db4504a834abc823Bd6b1Db010fD6e7f3C4aB85', '10000000000000000', [0,1], ["0x59aa0ed94154a9256595beecd9646f902564ba6ec0945622ad103b4849f98e98","0x79eca97e44c2c1b775ef7cc4a16ba23a023a40d17ee969cce5e6ed90ab5b035b"], ["0x5164fd1d70593499b3d829a256e0ab2328d21fb5fa7f48cc46b1739fbf6192fa","0x4d814bbf86b32b70e078f8d3c110e9963011b52f8c3f397826f55c900d9455b1"], 211, '0x604650973221dc9f0da94fbf5fdbdfaa70e08f4c', 800000, '15000000000', seedHex)[0]).to.be.equal('0x244cdcc44095c8498e631d17ce8f90566fdb7c66edd2816906b58258d70f5ea9');
+    })
 });

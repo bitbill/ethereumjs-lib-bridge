@@ -151,7 +151,7 @@ function seedHexToPrivateForEtc(seedHex) {
  * @return {Boolean}
  */
 function isValidAddress(address) {
-	return ethereumjsUtil.isValidAddress(address)
+	return ethereumjsUtil.isValidAddress(address);
 }
 
 /**
@@ -160,7 +160,7 @@ function isValidAddress(address) {
  * @return {Boolean}
  */
 function isValidChecksumAddress(address) {
-	return ethereumjsUtil.isValidChecksumAddress(address)
+	return ethereumjsUtil.isValidChecksumAddress(address);
 }
 
 /**
@@ -171,7 +171,7 @@ function isValidChecksumAddress(address) {
  * @return {Boolean}
  */
 function isAddress(address) {
-    return web3.isAddress(address)
+    return web3.isAddress(address);
 }
 
 /**
@@ -180,7 +180,7 @@ function isAddress(address) {
  * @return {String} address
  */
 function ibanToAddress(iban) {
-    return ethereumjsUtil.toChecksumAddress(icap.toAddress(iban))
+    return ethereumjsUtil.toChecksumAddress(icap.toAddress(iban));
 }
 
 /**
@@ -189,7 +189,7 @@ function ibanToAddress(iban) {
  * @return {String} iban
  */
 function addressToIban(address) {
-    return icap.fromAddress(address, false, true)
+    return icap.fromAddress(address, false, true);
 }
 
 /**
@@ -237,7 +237,7 @@ function buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, 
  */
 function buildEthTxBySeedHex(seedHex, amountWei, addressTo, nonce, gasPrice, gasLimit, customData) {
     var privateKey = seedHexToPrivate(seedHex);
-    return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData)
+    return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData);
 }
 
 /**
@@ -252,7 +252,7 @@ function buildEthTxBySeedHex(seedHex, amountWei, addressTo, nonce, gasPrice, gas
  * @return {Array} [txid, serializedTx]
  */
 function buildEtcTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData) {
-    return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData, 61)
+    return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData, 61);
 }
 
 /**
@@ -268,7 +268,7 @@ function buildEtcTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, 
  */
 function buildEtcTxBySeedHex(seedHex, amountWei, addressTo, nonce, gasPrice, gasLimit, customData) {
     var privateKey = seedHexToPrivate(seedHex);
-    return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData, 61)
+    return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData, 61);
 }
 
 /**
@@ -309,7 +309,7 @@ function buildTokenTransaction(amountWei, addressTo, nonce, contractAddress, gas
  */
 function buildTokenTxBySeedHex(seedHex, amountWei, addressTo, nonce, contractAddress, gasLimit, gasPrice) {
     var privateKey = seedHexToPrivate(seedHex);
-    return buildTokenTransaction(amountWei, addressTo, nonce, contractAddress, gasLimit, gasPrice, privateKey)
+    return buildTokenTransaction(amountWei, addressTo, nonce, contractAddress, gasLimit, gasPrice, privateKey);
 }
 
 /**
@@ -348,7 +348,7 @@ function buildMapEosTransaction(eosPublicKey, nonce, contractAddress, gasLimit, 
  */
 function buildMapEosTxBySeedHex(seedHex, eosPublicKey, nonce, contractAddress, gasLimit, gasPrice) {
     var privateKey = seedHexToPrivate(seedHex);
-    return buildMapEosTransaction(eosPublicKey, nonce, contractAddress, gasLimit, gasPrice, privateKey)
+    return buildMapEosTransaction(eosPublicKey, nonce, contractAddress, gasLimit, gasPrice, privateKey);
 }
 
 /**
@@ -377,7 +377,7 @@ function getPrivateKeyFromKeystore (password, keystoreContent) {
  * @return {String} Plaintext private key.
  */
 function getHexPrivateKeyFromKeystore (password, keystoreContent) {
-    return getPrivateKeyFromKeystore (password, keystoreContent).toString('hex')
+    return getPrivateKeyFromKeystore (password, keystoreContent).toString('hex');
 }
 
 /**
@@ -440,7 +440,7 @@ function getKeyPairAddrAsyncFromKeystore (password, keystoreContent, cb) {
         var address = "0x" + privateToAddress(privateKey).toString('hex');
         address = ethereumjsUtil.toChecksumAddress(address);
 
-        cb && cb([privateKey.toString('hex'), publicKey.toString('hex'), address])
+        cb && cb([privateKey.toString('hex'), publicKey.toString('hex'), address]);
     });
 }
 
@@ -462,7 +462,7 @@ function getPubAddrFromPrivate(privateKey) {
     var address = "0x" + privateToAddress(privateKeyBuffer).toString('hex');
     address = ethereumjsUtil.toChecksumAddress(address);
 
-    return [publicKey.toString('hex'), address]
+    return [publicKey.toString('hex'), address];
 }
 
 /**
@@ -658,6 +658,6 @@ module.exports = {
     buildCallMSContractMdTx: buildCallMSContractMdTx,
     buildCallMSContractMdTxBySeedHex: buildCallMSContractMdTxBySeedHex,
     generateMultiSig: generateMultiSig,
-    generateMultiSigBySeedHex: generateMultiSigBySeedHex
+    generateMultiSigBySeedHex: generateMultiSigBySeedHex,
 };
 

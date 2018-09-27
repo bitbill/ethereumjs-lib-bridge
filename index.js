@@ -476,7 +476,7 @@ function toChecksumAddress(address) {
 
 /**
  * build a deploy contract transaction
- * @param {Array} constructorArgs
+ * @param {String} constructorArgs: '{owners:['0x123...','0x123...','0x123...'], required: 2}' for 2 of 3
  * @param {Number|String} nonce
  * @param {Number|String} gasPrice
  * @param {Number|String} gasLimit
@@ -484,8 +484,10 @@ function toChecksumAddress(address) {
  * @return {Array} [txid, serializedTx]
  */
 function buildDeployContractTx(constructorArgs, nonce, gasLimit, gasPrice, privateKey) {
+    constructorArgs = JSON.parse(constructorArgs);
+
     privateKey = Buffer.from(privateKey, 'hex');
-    var data = util.getDeployContractTxData(web3, constructorArgs);
+    var data = util.getDeployContractTxData(web3, [constructorArgs.owners, constructorArgs.required]);
     console.log('buildDeployContractTx data', data);
     var transaction = new EthereumTx({
         nonce: web3.toHex(nonce),
@@ -504,7 +506,7 @@ function buildDeployContractTx(constructorArgs, nonce, gasLimit, gasPrice, priva
 
 /**
  * build a deploy contract transaction by Hex-encoded seed
- * @param {Array} constructorArgs
+ * @param {String} constructorArgs: '{owners:['0x123...','0x123...','0x123...'], required: 2}' for 2 of 3
  * @param {Number|String} nonce
  * @param {Number|String} gasPrice
  * @param {Number|String} gasLimit
@@ -547,9 +549,9 @@ function buildCallContractMdTx(funcName, types, values, nonce, contractAddress, 
  * build a transaction for calling multisig contract method
  * @param {String} destination
  * @param {Number|String} value
- * @param {Array} vs: Array of multisig v
- * @param {Array} rs: Array of multisig r
- * @param {Array} ss: Array of multisig s
+ * @param {String} vs: Array of multisig v
+ * @param {String} rs: Array of multisig r
+ * @param {String} ss: Array of multisig s
  * @param {Number|String} nonce
  * @param {String} contractAddress
  * @param {Number|String} gasPrice
@@ -558,6 +560,10 @@ function buildCallContractMdTx(funcName, types, values, nonce, contractAddress, 
  * @return {Array} [txid, serializedTx]
  */
 function buildCallMSContractMdTx(destination, value, vs, rs, ss, nonce, contractAddress, gasLimit, gasPrice, privateKey) {
+    vs = JSON.parse(vs);
+    rs = JSON.parse(rs);
+    ss = JSON.parse(ss);
+
     var funcName = 'spend';
     var types = ['address', 'uint256', 'uint8[]', 'bytes32[]', 'bytes32[]'];
     var values = [destination, web3.toHex(value), vs, rs, ss];
@@ -568,9 +574,9 @@ function buildCallMSContractMdTx(destination, value, vs, rs, ss, nonce, contract
  * build a transaction for calling multisig contract method by Hex-encoded seed
  * @param {String} destination
  * @param {Number|String} value
- * @param {Array} vs: Array of multisig v
- * @param {Array} rs: Array of multisig r
- * @param {Array} ss: Array of multisig s
+ * @param {String} vs: Array of multisig v
+ * @param {String} rs: Array of multisig r
+ * @param {String} ss: Array of multisig s
  * @param {Number|String} nonce
  * @param {String} contractAddress
  * @param {Number|String} gasPrice

@@ -64,7 +64,7 @@ bridge.generateEosKeyPair(function(eosKeyPair) {
 // build tx
 console.log('buildEthTransaction:' + JSON.stringify(bridge.buildEthTransaction(privateKey.toString('hex'), 1e+17, '0xd46e8dd67c5d32be8058bb8eb970870f07244567', 0, 1e+12, 21000)))
 console.log('buildEtcTxBySeedHex:' + JSON.stringify(bridge.buildEtcTxBySeedHex(seedHex, 1e+17, '0xd46e8dd67c5d32be8058bb8eb970870f07244567', 0, 1e+12, 21000)))
-console.log('buildDeployContractTx:' + JSON.stringify(bridge.buildDeployContractTx([['0x1E335392255A738Eb98b71d24445f54488Cb2CDB','0x097bEA5e8032066457B516abbAD59B67D1096405','0x0298E91A39E001626d33cCF3e62b00F35f74055e'], 2], 0, 1e+12, 21000, privateKey.toString('hex'))))
+console.log('buildDeployContractTx:' + JSON.stringify(bridge.buildDeployContractTx('{"owners":["0x1E335392255A738Eb98b71d24445f54488Cb2CDB","0x097bEA5e8032066457B516abbAD59B67D1096405","0x0298E91A39E001626d33cCF3e62b00F35f74055e"], "required":2}', 0, 1e+12, 21000, privateKey.toString('hex'))))
 
 console.log('generateMultiSig: ' + JSON.stringify(bridge.generateMultiSig(123456789,'0xcbbe6ec46746218a5bed5b336ab86a0a22804d39','0x123456','0xB8c77482e45F1F44dE1745F52C74426C631bDD52','ded772d10a77295b897824db5a4ab11c24a507a146cef2560460e491d242ccb9')))
 
@@ -218,18 +218,18 @@ describe('multiple signature', function() {
     });
 
     it('buildDeployContractTx', function() {
-        expect(bridge.buildDeployContractTx([['0x1E335392255A738Eb98b71d24445f54488Cb2CDB', '0x097bEA5e8032066457B516abbAD59B67D1096405', '0x0298E91A39E001626d33cCF3e62b00F35f74055e'], 2], 0, 1e+12, 21000, privateKey.toString('hex'))[0]).to.be.equal('0xa9daf62d02467f530ec407a0c101774579b843eec0da380eb151b1de41278d78');
+        expect(bridge.buildDeployContractTx('{"owners":["0x1E335392255A738Eb98b71d24445f54488Cb2CDB", "0x097bEA5e8032066457B516abbAD59B67D1096405", "0x0298E91A39E001626d33cCF3e62b00F35f74055e"], "required":2}', 0, 1e+12, 21000, privateKey.toString('hex'))[0]).to.be.equal('0x5dabd73a3746d82207274786e847480640771cb10e084766443024724998c09c');
     });
 
     it('buildDeployContractTxBySeedHex', function() {
-        expect(bridge.buildDeployContractTxBySeedHex([['0x1E335392255A738Eb98b71d24445f54488Cb2CDB', '0x097bEA5e8032066457B516abbAD59B67D1096405', '0x0298E91A39E001626d33cCF3e62b00F35f74055e'], 2], 0, 1e+12, 21000, seedHex)[0]).to.be.equal('0x6576f6facb6d38a2e8569fb0145b036854bca50c117c402220b191496418ce1d');
+        expect(bridge.buildDeployContractTxBySeedHex('{"owners":["0x1E335392255A738Eb98b71d24445f54488Cb2CDB", "0x097bEA5e8032066457B516abbAD59B67D1096405", "0x0298E91A39E001626d33cCF3e62b00F35f74055e"], "required":2}', 0, 1e+12, 21000, seedHex)[0]).to.be.equal('0x991f7e81f006242ecc793fb8dfe6d884cbb6344124fe1e7194984120ddb957d6');
     });
 
     it('buildCallMSContractMdTx', function() {
-        expect(bridge.buildCallMSContractMdTx('0x4Db4504a834abc823Bd6b1Db010fD6e7f3C4aB85', '10000000000000000', [0,1], ["0x59aa0ed94154a9256595beecd9646f902564ba6ec0945622ad103b4849f98e98","0x79eca97e44c2c1b775ef7cc4a16ba23a023a40d17ee969cce5e6ed90ab5b035b"], ["0x5164fd1d70593499b3d829a256e0ab2328d21fb5fa7f48cc46b1739fbf6192fa","0x4d814bbf86b32b70e078f8d3c110e9963011b52f8c3f397826f55c900d9455b1"], 211, '0x604650973221dc9f0da94fbf5fdbdfaa70e08f4c', 800000, '15000000000', hexPrivateKey)[0]).to.be.equal('0x10a27c24f0962733ce6ee0cf59e51471f1535435f6c0dd21402aac66fa846e32');
+        expect(bridge.buildCallMSContractMdTx('0x4Db4504a834abc823Bd6b1Db010fD6e7f3C4aB85', '10000000000000000', '[0,1]', '["0x59aa0ed94154a9256595beecd9646f902564ba6ec0945622ad103b4849f98e98","0x79eca97e44c2c1b775ef7cc4a16ba23a023a40d17ee969cce5e6ed90ab5b035b"]', '["0x5164fd1d70593499b3d829a256e0ab2328d21fb5fa7f48cc46b1739fbf6192fa","0x4d814bbf86b32b70e078f8d3c110e9963011b52f8c3f397826f55c900d9455b1"]', 211, '0x604650973221dc9f0da94fbf5fdbdfaa70e08f4c', 800000, '15000000000', hexPrivateKey)[0]).to.be.equal('0x10a27c24f0962733ce6ee0cf59e51471f1535435f6c0dd21402aac66fa846e32');
     });
 
     it('buildCallMSContractMdTxBySeedHex', function() {
-        expect(bridge.buildCallMSContractMdTxBySeedHex('0x4Db4504a834abc823Bd6b1Db010fD6e7f3C4aB85', '10000000000000000', [0,1], ["0x59aa0ed94154a9256595beecd9646f902564ba6ec0945622ad103b4849f98e98","0x79eca97e44c2c1b775ef7cc4a16ba23a023a40d17ee969cce5e6ed90ab5b035b"], ["0x5164fd1d70593499b3d829a256e0ab2328d21fb5fa7f48cc46b1739fbf6192fa","0x4d814bbf86b32b70e078f8d3c110e9963011b52f8c3f397826f55c900d9455b1"], 211, '0x604650973221dc9f0da94fbf5fdbdfaa70e08f4c', 800000, '15000000000', seedHex)[0]).to.be.equal('0x244cdcc44095c8498e631d17ce8f90566fdb7c66edd2816906b58258d70f5ea9');
+        expect(bridge.buildCallMSContractMdTxBySeedHex('0x4Db4504a834abc823Bd6b1Db010fD6e7f3C4aB85', '10000000000000000', '[0,1]', '["0x59aa0ed94154a9256595beecd9646f902564ba6ec0945622ad103b4849f98e98","0x79eca97e44c2c1b775ef7cc4a16ba23a023a40d17ee969cce5e6ed90ab5b035b"]', '["0x5164fd1d70593499b3d829a256e0ab2328d21fb5fa7f48cc46b1739fbf6192fa","0x4d814bbf86b32b70e078f8d3c110e9963011b52f8c3f397826f55c900d9455b1"]', 211, '0x604650973221dc9f0da94fbf5fdbdfaa70e08f4c', 800000, '15000000000', seedHex)[0]).to.be.equal('0x244cdcc44095c8498e631d17ce8f90566fdb7c66edd2816906b58258d70f5ea9');
     })
 });

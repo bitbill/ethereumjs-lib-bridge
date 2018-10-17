@@ -218,11 +218,11 @@ describe('multiple signature', function() {
     });
 
     it('buildDeployContractTx', function() {
-        expect(bridge.buildDeployContractTx('{"owners":["0x1E335392255A738Eb98b71d24445f54488Cb2CDB", "0x097bEA5e8032066457B516abbAD59B67D1096405", "0x0298E91A39E001626d33cCF3e62b00F35f74055e"], "required":2}', 0, 1e+12, 21000, privateKey.toString('hex'))[0]).to.be.equal('0x5dabd73a3746d82207274786e847480640771cb10e084766443024724998c09c');
+        expect(bridge.buildDeployContractTx('{"owners":["0x1E335392255A738Eb98b71d24445f54488Cb2CDB", "0x097bEA5e8032066457B516abbAD59B67D1096405", "0x0298E91A39E001626d33cCF3e62b00F35f74055e"], "required":2}', 0, 1e+12, 21000, privateKey.toString('hex'))[0]).to.be.equal('0x50218e531110fcddb51c48eb6d787d1ea928b9934aee8264b8b05718a97ae428');
     });
 
     it('buildDeployContractTxBySeedHex', function() {
-        expect(bridge.buildDeployContractTxBySeedHex('{"owners":["0x1E335392255A738Eb98b71d24445f54488Cb2CDB", "0x097bEA5e8032066457B516abbAD59B67D1096405", "0x0298E91A39E001626d33cCF3e62b00F35f74055e"], "required":2}', 0, 1e+12, 21000, seedHex)[0]).to.be.equal('0x991f7e81f006242ecc793fb8dfe6d884cbb6344124fe1e7194984120ddb957d6');
+        expect(bridge.buildDeployContractTxBySeedHex('{"owners":["0x1E335392255A738Eb98b71d24445f54488Cb2CDB", "0x097bEA5e8032066457B516abbAD59B67D1096405", "0x0298E91A39E001626d33cCF3e62b00F35f74055e"], "required":2}', 0, 1e+12, 21000, seedHex)[0]).to.be.equal('0xc1fd045f9b5ff22d272207fc3c4515f2453e2a7b1fcf764e102ba6d92faf0de0');
     });
 
     it('buildCallMSContractMdTx', function() {

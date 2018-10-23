@@ -34,6 +34,9 @@ console.log('isAddress: ' + bridge.isAddress('0xd1220A0cf47c7B9Be7A2E6BA89F42976
 console.log('ibanToAddress: ' + bridge.ibanToAddress('XE7338O073KYGTWWZN0F2WZ0R8PX5ZPPZS'))
 console.log('addressToIban: ' + bridge.addressToIban('0x00c5496aee77c1ba1f0854206a26dda82a81d6d8'))
 
+// console.log('generateMnemonicStore: ' + bridge.generateMnemonicStore('123456', mnemonic))
+// console.log('getMnemonicFromMnemonicStore: ' + bridge.getMnemonicFromMnemonicStore('123456', '{"crypto":{"cipher":"aes-128-ctr","ciphertext":"330905d7be74c66204627bbc63e9f3632d114e7ad0146f2abf9127ed4b20c3b0e265523ec0e849dad48d897e97000ae652f8e293cdf5fd4d682381a83bc68def0c4004dfea22ab38346aa469722a","cipherparams":{"iv":"0e2743952791d2c013595dd6562e395a"},"mac":"99d8089db2b8420427257fc2fbae5972e516bfa092adf228258dbadf46bf03d4","kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"r":8,"p":1,"salt":"8770de06f6f1c588012196a22c77a9198ba1ba7e8924f5622c8341c0af7f61a1"}},"id":"a46487ec-96cc-4b5d-a729-5016a0407584","version":3}'))
+
 // get private key from keystore
 var keystoreContent = '{"version":3,"id":"ce14bddd-dc5b-4f24-b94c-1bae704f6866","address":"2a055947da8ba17ac751f2aa2ea5ecfee3db8c33","Crypto":{"ciphertext":"31743384b6bede7741d90445715e95600a108edb38fd118d65e07bbf2b1e2c68","cipherparams":{"iv":"8f7b036788323944affb3ddfe286a9d4"},"cipher":"aes-128-ctr","kdf":"scrypt","kdfparams":{"dklen":32,"salt":"d69affc8ef632ea27dedddacac00f714d17537c980193fb7dd26051d04eb4f57","n":8192,"r":8,"p":1},"mac":"581846f21e493383ae500012664d340c95dffb7897fb061519aedc9a9c96e915"}}'
 var privateKey = bridge.getPrivateKeyFromKeystore('123456789', keystoreContent)
@@ -194,6 +197,14 @@ describe('generate eos key pair', function() {
             expect(eosKeyPair).to.be.an('object');
             done();
         })
+    });
+});
+
+describe('mnemonic store', function() {
+    it('generateMnemonicStore getMnemonicFromMnemonicStore', function() {
+        this.timeout(TIMEOUT);
+        var mnemonicStore = bridge.generateMnemonicStore('123456', mnemonic);
+        expect(bridge.getMnemonicFromMnemonicStore('123456', mnemonicStore)).to.be.equal(mnemonic);
     });
 });
 

@@ -137,6 +137,19 @@ function seedHexToPrivate(seedHex, path) {
 }
 
 /**
+ * Hex-encoded seed to Hex-encoded privateKey
+ * @param {String} seedHex: Hex-encoded seed
+ * @param {String} [path] Derive path
+ * @return {String} Hex-encoded privateKey
+ */
+function seedHexToHexPrivate(seedHex, path) {
+    var seed = Buffer.from(seedHex, 'hex');
+    var hd = hdkey.fromMasterSeed(seed);
+    var wallet = hd.derivePath(path || ETHEREUM_MAINNET_PATH).getWallet();
+    return wallet.getPrivateKeyString();
+}
+
+/**
  * Hex-encoded seed to privateKey
  * @param {String} seedHex: Hex-encoded seed
  * @return {Buffer} privateKey
@@ -378,6 +391,16 @@ function getPrivateKeyFromKeystore (password, keystoreContent) {
  */
 function getHexPrivateKeyFromKeystore (password, keystoreContent) {
     return getPrivateKeyFromKeystore (password, keystoreContent).toString('hex');
+}
+
+/**
+ * Recover mnemonic from secret-storage mnemonic object.
+ * @param {string} password.
+ * @param {string} mnemonicStoreContent: mnemonicStore file content.
+ * @return {String} mnemonic.
+ */
+function getMnemonicFromMnemonicStore (password, mnemonicStoreContent) {
+    return getPrivateKeyFromKeystore (password, mnemonicStoreContent).toString();
 }
 
 /**
@@ -623,6 +646,34 @@ function generateMultiSigBySeedHex(spendNonce, contractAddress, value, destinati
     return generateMultiSig(spendNonce, contractAddress, value, destination, privateKey);
 }
 
+/**
+ * generate secret-storage mnemonic object.
+ * @param {String} password.
+ * @param {String} mnemonic.
+ * @return {Object} mnemonic store.
+ */
+function generateMnemonicStore(password, mnemonic) {
+    var params = { keyBytes: 32, ivBytes: 16 };
+    var dk = keythereum.create(params);
+
+    var options = {
+        kdf: "scrypt",
+        cipher: "aes-128-ctr",
+        kdfparams: {
+            "dklen": 32,
+            "n": 262144,
+            "p": 1,
+            "r": 8
+        }
+    };
+
+    var mnemonicObject = keythereum.dumpForMnemonic(password, mnemonic, dk.salt, dk.iv, options);
+    console.log('generateMnemonicStore: ' + JSON.stringify(mnemonicObject));
+
+    return JSON.stringify(mnemonicObject);
+}
+
+
 module.exports = {
     mnemonicToSeed: mnemonicToSeed,
     mnemonicToSeedHex: mnemonicToSeedHex,
@@ -631,6 +682,7 @@ module.exports = {
     seedHexToAddress: seedHexToAddress,
     seedHexToPubAddr: seedHexToPubAddr,
     seedHexToPrivate: seedHexToPrivate,
+    seedHexToHexPrivate: seedHexToHexPrivate,
     isValidAddress: isValidAddress,
     isValidChecksumAddress: isValidChecksumAddress,
     isAddress: isAddress,
@@ -665,5 +717,7 @@ module.exports = {
     buildCallMSContractMdTxBySeedHex: buildCallMSContractMdTxBySeedHex,
     generateMultiSig: generateMultiSig,
     generateMultiSigBySeedHex: generateMultiSigBySeedHex,
+    getMnemonicFromMnemonicStore: getMnemonicFromMnemonicStore,
+    generateMnemonicStore: generateMnemonicStore
 };
 

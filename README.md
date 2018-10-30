@@ -16,6 +16,8 @@ bridge.methodName('param1', 'param2')
 --- | --- | --- | ---
 mnemonicToSeed | 助记词生成seed | mnemonic：助记词 | 助记词字符串，以空格隔开
 seedToAddress | seed生成地址 | seed：buffer | buffer，不是hex字符串
-seedHexToAddress | seed hex字符串生产地址 | seed：hex字符串 |
+seedHexToAddress | seed hex字符串生产地址 | seed：hex字符串 | 地址
 isValidAddress | 校验地址 | address：地址 | 字符串
-isValidChecksumAddress | 校验地址 | address：地址 | 字符串
+seedHexToPrivateHex | seed生成私钥 | seedHex：hex字符串 <br> path: 可选，默认eth地址路径 | Hex-privateKey
+generateMnemonicStore | 生成mnemonicStore | password: 密码 <br> mnemonic: 助记词 | mnemonicStore，类似于keystore
+getMnemonicFromMnemonicStore | 生成助记词 | password: 密码 <br> mnemonicStoreContent: 类似于keystore内容 | 助记词

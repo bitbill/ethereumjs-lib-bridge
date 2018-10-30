@@ -16,6 +16,7 @@ var seedHexToAddress = bridge.seedHexToAddress(seedHex)
 console.log('seedHexToAddress: ' + seedHexToAddress)
 console.log('seedHexToPubAddr: ' + JSON.stringify(bridge.seedHexToPubAddr(seedHex)))
 console.log('seedHexToPrivate: ' + bridge.seedHexToPrivate(seedHex).toString('hex'))
+console.log('seedHexToPrivateHex: ' + bridge.seedHexToPrivateHex(seedHex))
 
 console.log('seedHexToAddrForEtc: ' + bridge.seedHexToAddrForEtc(seedHex))
 console.log('seedHexToPubAddrForEtc: ' + JSON.stringify(bridge.seedHexToPubAddrForEtc(seedHex)))
@@ -82,6 +83,10 @@ describe('seed', function() {
 
     it('seedHexToPrivate', function() {
         expect(bridge.seedHexToPrivate(seedHex).toString('hex')).to.be.equal('f21c74d3bf4464e1472343ce5bbd62a572afcf51e36d6b65ac003fe53c3dca3d');
+    });
+
+    it('seedHexToPrivateHex', function() {
+        expect(bridge.seedHexToPrivateHex(seedHex)).to.be.equal('0xf21c74d3bf4464e1472343ce5bbd62a572afcf51e36d6b65ac003fe53c3dca3d');
     });
 
     it('seedToAddress', function() {

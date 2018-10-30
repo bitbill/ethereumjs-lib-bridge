@@ -142,7 +142,7 @@ function seedHexToPrivate(seedHex, path) {
  * @param {String} [path] Derive path
  * @return {String} Hex-encoded privateKey
  */
-function seedHexToHexPrivate(seedHex, path) {
+function seedHexToPrivateHex(seedHex, path) {
     var seed = Buffer.from(seedHex, 'hex');
     var hd = hdkey.fromMasterSeed(seed);
     var wallet = hd.derivePath(path || ETHEREUM_MAINNET_PATH).getWallet();
@@ -473,6 +473,10 @@ function getKeyPairAddrAsyncFromKeystore (password, keystoreContent, cb) {
  * @return {Array} [publicKey, address].
  */
 function getPubAddrFromPrivate(privateKey) {
+    if((typeof privateKey === 'string') && (privateKey.indexOf('0x') === 0)) {
+        privateKey = privateKey.substr(2);
+    }
+
     var privateKeyBuffer = keythereum.str2buf(privateKey);
     if (privateKeyBuffer.length < 32) {
         privateKeyBuffer = Buffer.concat([
@@ -682,7 +686,7 @@ module.exports = {
     seedHexToAddress: seedHexToAddress,
     seedHexToPubAddr: seedHexToPubAddr,
     seedHexToPrivate: seedHexToPrivate,
-    seedHexToHexPrivate: seedHexToHexPrivate,
+    seedHexToPrivateHex: seedHexToPrivateHex,
     isValidAddress: isValidAddress,
     isValidChecksumAddress: isValidChecksumAddress,
     isAddress: isAddress,

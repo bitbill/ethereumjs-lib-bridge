@@ -677,6 +677,68 @@ function generateMnemonicStore(password, mnemonic) {
     return JSON.stringify(mnemonicObject);
 }
 
+/**
+ * build a poa transaction by Hex-encoded privateKey
+ * @param {String} privateKey: Hex-encoded
+ * @param {Number|String} amountWei
+ * @param {String} addressTo
+ * @param {Number|String} nonce
+ * @param {Number|String} gasPrice
+ * @param {Number|String} gasLimit
+ * @param {String} customData
+ * @return {Array} [txid, serializedTx]
+ */
+function buildPoaTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData) {
+    return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData, 0x63);
+}
+
+/**
+ * build a poa transaction by Hex-encoded seed
+ * @param {String} seedHex: Hex-encoded seed
+ * @param {Number|String} amountWei
+ * @param {String} addressTo
+ * @param {Number|String} nonce
+ * @param {Number|String} gasPrice
+ * @param {Number|String} gasLimit
+ * @param {String} customData
+ * @return {Array} [txid, serializedTx]
+ */
+function buildPoaTxBySeedHex(seedHex, amountWei, addressTo, nonce, gasPrice, gasLimit, customData) {
+    var privateKey = seedHexToPrivate(seedHex);
+    return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData, 0x63);
+}
+
+/**
+ * build a go transaction by Hex-encoded privateKey
+ * @param {String} privateKey: Hex-encoded
+ * @param {Number|String} amountWei
+ * @param {String} addressTo
+ * @param {Number|String} nonce
+ * @param {Number|String} gasPrice
+ * @param {Number|String} gasLimit
+ * @param {String} customData
+ * @return {Array} [txid, serializedTx]
+ */
+function buildGoTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData) {
+    return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData, 60);
+}
+
+/**
+ * build a go transaction by Hex-encoded seed
+ * @param {String} seedHex: Hex-encoded seed
+ * @param {Number|String} amountWei
+ * @param {String} addressTo
+ * @param {Number|String} nonce
+ * @param {Number|String} gasPrice
+ * @param {Number|String} gasLimit
+ * @param {String} customData
+ * @return {Array} [txid, serializedTx]
+ */
+function buildGoTxBySeedHex(seedHex, amountWei, addressTo, nonce, gasPrice, gasLimit, customData) {
+    var privateKey = seedHexToPrivate(seedHex);
+    return buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, gasLimit, customData, 60);
+}
+
 
 module.exports = {
     mnemonicToSeed: mnemonicToSeed,
@@ -722,6 +784,10 @@ module.exports = {
     generateMultiSig: generateMultiSig,
     generateMultiSigBySeedHex: generateMultiSigBySeedHex,
     getMnemonicFromMnemonicStore: getMnemonicFromMnemonicStore,
-    generateMnemonicStore: generateMnemonicStore
+    generateMnemonicStore: generateMnemonicStore,
+    buildPoaTransaction: buildPoaTransaction,
+    buildPoaTxBySeedHex: buildPoaTxBySeedHex,
+    buildGoTransaction: buildGoTransaction,
+    buildGoTxBySeedHex: buildGoTxBySeedHex
 };
 

@@ -22,9 +22,6 @@ console.log('seedHexToAddrForEtc: ' + bridge.seedHexToAddrForEtc(seedHex))
 console.log('seedHexToPubAddrForEtc: ' + JSON.stringify(bridge.seedHexToPubAddrForEtc(seedHex)))
 console.log('seedHexToPrivateForEtc: ' + bridge.seedHexToPrivateForEtc(seedHex).toString('hex'))
 
-var mnemonicToAddress = bridge.seedToAddress(bridge.mnemonicToSeed(mnemonic))
-console.log('mnemonicToSeed-seedToAddress: ' + mnemonicToAddress)
-
 console.log('isValidAddress: ' + bridge.isValidAddress(seedHexToAddress))
 console.log('isValidAddress: ' + bridge.isValidAddress('0x8617E340B3D01FA5F11F306F4090FD50E238070W'))
 console.log('isValidChecksumAddress: ' + bridge.isValidChecksumAddress(seedHexToAddress))
@@ -89,10 +86,6 @@ describe('seed', function() {
         expect(bridge.seedHexToPrivateHex(seedHex)).to.be.equal('0xf21c74d3bf4464e1472343ce5bbd62a572afcf51e36d6b65ac003fe53c3dca3d');
     });
 
-    it('seedToAddress', function() {
-        expect(bridge.seedToAddress(bridge.mnemonicToSeed(mnemonic))).to.be.equal('0x9124bae940c2321ded56f89b7e185b8785942303');
-    });
-
 
     // etc
     it('seedHexToAddrForEtc', function() {
@@ -108,11 +101,6 @@ describe('seed', function() {
     });
 });
 
-describe('mnemonic', function() {
-    it('mnemonicToSeed', function() {
-        expect(bridge.mnemonicToSeed(mnemonic).toString('hex')).to.be.equal(seedHex);
-    });
-});
 
 describe('verify address', function() {
     it('isValidAddress true', function() {

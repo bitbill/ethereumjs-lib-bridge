@@ -15,27 +15,6 @@ var ETHEREUM_MAINNET_PATH = "m/44'/60'/0'/0/0"; // ETH coin type is 60
 var ETHEREUM_CLASSIC_MAINNET_PATH = "m/44'/61'/0'/0/0"; // ETC coin type is 61
 var ETHEREUM_TESTNET_PATH = "m/44'/1'/0'/0"; // Testnet (all coins) coin type is 1
 
-var bip39 = require('bip39');
-
-/**
- * Mnemonic to seed
- * @param {String} mnemonic
- * @return {Buffer} seed
- */
-function mnemonicToSeed(mnemonic) {
-	var seed = bip39.mnemonicToSeed(mnemonic);
-	return seed;
-}
-
-/**
- * Mnemonic to seedHex
- * @param {String} mnemonic
- * @return {String} seedHex
- */
-function mnemonicToSeedHex(mnemonic) {
-    var seed = bip39.mnemonicToSeed(mnemonic);
-    return seed.toString('hex');
-}
 
 /**
  * Seed to address
@@ -232,7 +211,7 @@ function buildEthTransaction(privateKey, amountWei, addressTo, nonce, gasPrice, 
     var txid = ('0x' + transaction.hash().toString('hex'));
     var serializedTx = ('0x' + transaction.serialize().toString('hex'));
 
-    console.log('buildEthTransaction-transaction: ' + JSON.stringify(transaction));
+    // console.log('buildEthTransaction-transaction: ' + JSON.stringify(transaction));
 
     return [txid, serializedTx];
 }
@@ -515,7 +494,7 @@ function buildDeployContractTx(constructorArgs, nonce, gasLimit, gasPrice, priva
 
     privateKey = Buffer.from(privateKey, 'hex');
     var data = util.getDeployContractTxData(web3, [constructorArgs.owners, constructorArgs.required]);
-    console.log('buildDeployContractTx data', data);
+    // console.log('buildDeployContractTx data', data);
     var transaction = new EthereumTx({
         nonce: web3.toHex(nonce),
         gasPrice: web3.toHex(gasPrice),
@@ -628,9 +607,9 @@ function buildCallMSContractMdTxBySeedHex(destination, value, vs, rs, ss, nonce,
 function generateMultiSig(spendNonce, contractAddress, value, destination, privateKey) {
     privateKey = Buffer.from(privateKey, 'hex');
     var msgHex = '0x' + web3.padLeft(web3.toHex(spendNonce).substr(2), 64) + web3.toHex(contractAddress).substr(2) + web3.padLeft(web3.toHex(value).substr(2), 64) + web3.toHex(destination).substr(2);
-    console.log('msgHex: ' + msgHex);
+    // console.log('msgHex: ' + msgHex);
     var msgHash = ethereumjsUtil.hashPersonalMessage(ethereumjsUtil.sha3(msgHex));
-    console.log('msgHash: ' + msgHash.toString('hex'));
+    // console.log('msgHash: ' + msgHash.toString('hex'));
     var sig = ethereumjsUtil.ecsign(msgHash, privateKey);
 
     return [sig.v-27, '0x'+sig.r.toString('hex'), '0x'+sig.s.toString('hex')];
@@ -672,7 +651,7 @@ function generateMnemonicStore(password, mnemonic) {
     };
 
     var mnemonicObject = keythereum.dumpForMnemonic(password, mnemonic, dk.salt, dk.iv, options);
-    console.log('generateMnemonicStore: ' + JSON.stringify(mnemonicObject));
+    // console.log('generateMnemonicStore: ' + JSON.stringify(mnemonicObject));
 
     return JSON.stringify(mnemonicObject);
 }
@@ -741,8 +720,6 @@ function buildGoTxBySeedHex(seedHex, amountWei, addressTo, nonce, gasPrice, gasL
 
 
 module.exports = {
-    mnemonicToSeed: mnemonicToSeed,
-    mnemonicToSeedHex: mnemonicToSeedHex,
     seedToAddress: seedToAddress,
     seedToChecksumAddress: seedToChecksumAddress,
     seedHexToAddress: seedHexToAddress,

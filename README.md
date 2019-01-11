@@ -14,7 +14,6 @@ bridge.methodName('param1', 'param2')
 ## 公开的函数
 名称 | 功能 | 参数 | 返回值
 --- | --- | --- | ---
-mnemonicToSeed | 助记词生成seed | mnemonic: 助记词 | 助记词字符串，以空格隔开
 seedToAddress | seed生成地址 | seed: buffer | buffer，不是hex字符串
 seedHexToAddress | seed生成地址 | seedHex: hex字符串 | 地址
 isValidAddress | 校验地址 | address: 地址 | 字符串
